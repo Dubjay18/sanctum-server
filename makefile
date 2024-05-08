@@ -1,8 +1,8 @@
 
 build:
-	   @go build -o bin/gobank
+	   @go build -o bin/sanctum
 run: build
-	   @./bin/gobank
+	   @./bin/sanctum
 dev: build
 	   nodemon --exec go run main.go --signal SIGTERM
 
