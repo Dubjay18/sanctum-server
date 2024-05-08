@@ -30,3 +30,10 @@ func getLoggerLevel(value string) log.Level {
 		return log.InfoLevel
 	}
 }
+
+func LogError(err error, message string) {
+	log.WithFields(log.Fields{
+		"error": err,
+	}).Error(message)
+
+}
