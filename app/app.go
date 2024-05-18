@@ -2,19 +2,22 @@ package app
 
 import (
 	"fmt"
+	"github.com/Dubjay18/sanctum-server/app/controller"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
+	log "github.com/sirupsen/logrus"
 	"time"
 )
-
-type SocketServer struct {
-}
 
 func StartServer() {
 	//hub := dao.NewHub()
 	//wsHandler := controller.NewWsController(hub)
 	//go hub.Run()
+
+	server := socketio.NewServer(nil)
+	socketHandler := controller.NewSocketController()
+
 	router := gin.Default()
 	router.Use(gin.Logger())
 	router.Use(cors.New(cors.Config{
@@ -37,12 +40,12 @@ func StartServer() {
 		})
 	})
 
-	server := socketio.NewServer(nil)
-	server.OnConnect("/", func(s socketio.Conn) error {
-		s.SetContext("")
-		fmt.Println("connected:", s.ID())
-		return nil
+	server.OnConnect(controller.SocketConnection, socketHandler.HandleConnection)
+	server.OnEvent("/", "notice", func(s socketio.Conn, msg string) {
+		log.Println("notice:", msg)
+		s.Emit("reply", "have "+msg)
 	})
+
 	server.OnError("/", func(s socketio.Conn, e error) {
 		// server.Remove(s.ID())
 		fmt.Println("meet error:", e)
@@ -61,5 +64,6 @@ func StartServer() {
 	//router.GET("/get-rooms", wsHandler.GetRooms)
 	//router.GET("/get-clients/:id", wsHandler.GetClients)
 	router.GET("/socket.io/*any", gin.WrapH(server))
+	router.POST("/socket.io/*any", gin.WrapH(server))
 	router.Run() // listen and serve on 0.0.0.0:8080
 }

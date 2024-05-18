@@ -1,6 +1,13 @@
 package controller
 
+import (
+	"fmt"
+	socketio "github.com/googollee/go-socket.io"
+)
+
 const (
+	// SocketConnection is the event name for a connection
+	SocketConnection = "/"
 	// SocketEventCreateRoom is the event name for creating a room
 	SocketEventCreateRoom = "create_room"
 	// SocketEventJoinRoom is the event name for joining a room
@@ -20,3 +27,16 @@ const (
 	// SocketEventError is the event name for an error
 	SocketEventError = "error"
 )
+
+type SocketController struct {
+}
+
+func NewSocketController() *SocketController {
+	return &SocketController{}
+}
+
+func (so *SocketController) HandleConnection(s socketio.Conn) error {
+	s.SetContext("")
+	fmt.Println("connected:", s.ID())
+	return nil
+}
