@@ -1,12 +1,27 @@
 package dao
 
+type Room struct {
+	ID      int                `json:"id"`
+	Name    string             `json:"name"`
+	Clients map[string]*Client `json:"clients"`
+}
+
 type Hub struct {
 	// Registered clients.
-	clients map[*Client]bool
+	Rooms map[string]*Room `json:"rooms"`
 	// Inbound messages from the clients.
-	broadcast chan []byte
+	Broadcast chan *Message
 	// Register requests from the clients.
-	register chan *Client
+	Register chan *Client
 	// Unregister requests from clients.
-	unregister chan *Client
+	Unregister chan *Client
+}
+
+func NewHub() *Hub {
+	return &Hub{
+		Rooms:      make(map[string]*Room),
+		Register:   make(chan *Client),
+		Unregister: make(chan *Client),
+		Broadcast:  make(chan *Message, 5),
+	}
 }
