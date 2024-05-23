@@ -1,7 +1,7 @@
 package dao
 
 type Room struct {
-	ID      int                `json:"id"`
+	ID      string             `json:"id"`
 	Name    string             `json:"name"`
 	Clients map[string]*Client `json:"clients"`
 }

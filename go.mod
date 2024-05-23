@@ -23,6 +23,7 @@ require (
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/googollee/go-engine.io v1.4.2 // indirect
 	github.com/googollee/go-socket.io v1.7.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
